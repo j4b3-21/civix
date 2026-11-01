@@ -1,0 +1,228 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://civix.dev/schemas/service-definition/1.0.json",
+  "title": "CIVIX government service definition",
+  "description": "Versioned definition of one government service. Validated by apps/agent (Pydantic + this schema) before it can be synced into the platform.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "code", "version", "name", "summary", "description", "department", "category", "jurisdiction", "officialUrl", "portalDomains", "verificationStatus", "automationStatus", "isTestService", "sources", "eligibility", "requiredDocuments", "procedure"],
+  "properties": {
+    "schemaVersion": {"const": "1.0"},
+    "code": {"type": "string", "pattern": "^IN_[A-Z0-9]+(_[A-Z0-9]+)+$", "maxLength": 80},
+    "version": {"type": "integer", "minimum": 1},
+    "name": {"type": "string", "minLength": 3, "maxLength": 255},
+    "summary": {"type": "string", "minLength": 10, "maxLength": 500},
+    "description": {"type": "string", "minLength": 10},
+    "department": {"type": "string", "minLength": 2},
+    "ministry": {"type": ["string", "null"]},
+    "category": {"enum": ["EDUCATION", "SCHOLARSHIPS", "CERTIFICATES", "IDENTITY", "WELFARE", "AGRICULTURE", "BUSINESS", "LICENSES", "EMPLOYMENT", "UTILITIES", "OTHER"]},
+    "tags": {"type": "array", "items": {"type": "string", "pattern": "^[a-z0-9-]+$"}, "uniqueItems": true},
+    "jurisdiction": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["level", "states"],
+      "properties": {
+        "level": {"enum": ["CENTRAL", "STATE"]},
+        "states": {"type": "array", "items": {"type": "string", "pattern": "^IN-[A-Z]{2}$"}, "uniqueItems": true}
+      }
+    },
+    "officialUrl": {"type": "string", "pattern": "^https?://"},
+    "portalDomains": {"type": "array", "items": {"type": "string", "pattern": "^[a-z0-9.-]+$"}, "uniqueItems": true},
+    "verificationStatus": {"enum": ["DRAFT", "SOURCE_VERIFIED", "WORKFLOW_VERIFIED", "DEPRECATED"]},
+    "verificationNote": {"type": ["string", "null"]},
+    "automationStatus": {"enum": ["NOT_AUTOMATED", "GUIDED", "TEST_ONLY", "ACTIVE"]},
+    "automationNote": {"type": ["string", "null"]},
+    "isTestService": {"type": "boolean"},
+    "lastVerifiedAt": {"type": ["string", "null"], "format": "date"},
+    "deadline": {
+      "type": ["object", "null"],
+      "additionalProperties": false,
+      "required": ["date", "note", "sourceUrl", "verifiedAt"],
+      "properties": {
+        "date": {"type": ["string", "null"], "format": "date"},
+        "note": {"type": "string"},
+        "sourceUrl": {"type": "string", "pattern": "^https?://"},
+        "verifiedAt": {"type": "string", "format": "date"}
+      }
+    },
+    "benefits": {"type": "array", "items": {"type": "string"}},
+    "sources": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "url", "title", "kind", "retrievedAt"],
+        "properties": {
+          "id": {"type": "string", "pattern": "^[a-z0-9_]+$"},
+          "url": {"type": "string", "pattern": "^https?://"},
+          "title": {"type": "string"},
+          "kind": {"enum": ["OFFICIAL_PORTAL", "NOTIFICATION", "GUIDELINES", "FAQ", "TEST_ENVIRONMENT"]},
+          "retrievedAt": {"type": "string", "format": "date"},
+          "publisher": {"type": ["string", "null"]},
+          "note": {"type": ["string", "null"]}
+        }
+      }
+    },
+    "eligibility": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["rules"],
+      "properties": {
+        "rules": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["id", "version", "field", "operator", "description", "sourceId"],
+            "properties": {
+              "id": {"type": "string", "pattern": "^[a-z0-9_]+$"},
+              "version": {"type": "integer", "minimum": 1},
+              "field": {"type": "string", "pattern": "^[a-z0-9_]+$"},
+              "operator": {"enum": ["EQUALS", "NOT_EQUALS", "GREATER_THAN", "GREATER_THAN_OR_EQUAL", "LESS_THAN", "LESS_THAN_OR_EQUAL", "IN", "NOT_IN", "EXISTS", "DATE_BEFORE", "DATE_AFTER"]},
+              "value": {},
+              "description": {"type": "string"},
+              "sourceId": {"type": "string"},
+              "excerpt": {"type": ["string", "null"], "maxLength": 300}
+            }
+          }
+        },
+        "notEvaluated": {"type": "array", "items": {"type": "string"}, "description": "Official criteria CIVIX cannot evaluate from profile data; always shown to the citizen."}
+      }
+    },
+    "requiredDocuments": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["category", "description", "mandatory"],
+        "properties": {
+          "category": {"enum": ["IDENTITY_PROOF", "ADDRESS_PROOF", "INCOME_CERTIFICATE", "CASTE_CERTIFICATE", "ACADEMIC_RECORD", "BANK_DOCUMENT", "RESIDENCE_CERTIFICATE", "DISABILITY_CERTIFICATE", "PHOTOGRAPH", "OTHER"]},
+          "description": {"type": "string"},
+          "mandatory": {"type": "boolean"},
+          "condition": {"type": ["string", "null"]}
+        }
+      }
+    },
+    "procedure": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["order", "title", "description"],
+        "properties": {
+          "order": {"type": "integer", "minimum": 1},
+          "title": {"type": "string"},
+          "description": {"type": "string"}
+        }
+      }
+    },
+    "workflow": {"oneOf": [{"type": "null"}, {"$ref": "#/$defs/workflow"}]}
+  },
+  "$defs": {
+    "target": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "label": {"type": "string"},
+        "alternateLabels": {"type": "array", "items": {"type": "string"}},
+        "role": {"type": "string"},
+        "name": {"type": "string"},
+        "placeholder": {"type": "string"},
+        "testId": {"type": "string"},
+        "css": {"type": "string"}
+      }
+    },
+    "expectation": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "urlContains": {"type": "string"},
+        "textVisible": {"type": "string"},
+        "headingVisible": {"type": "string"}
+      }
+    },
+    "formField": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["key", "label", "inputType", "required"],
+      "properties": {
+        "key": {"type": "string", "pattern": "^[a-z0-9_]+$"},
+        "profileField": {"type": "string", "pattern": "^[a-z0-9_]+$"},
+        "constant": {"type": ["string", "number", "boolean"]},
+        "label": {"type": "string"},
+        "alternateLabels": {"type": "array", "items": {"type": "string"}},
+        "name": {"type": "string"},
+        "inputType": {"enum": ["text", "number", "date", "select", "radio", "checkbox", "email", "tel"]},
+        "format": {"type": "string", "description": "date format for DATE fields, e.g. %d/%m/%Y or %Y-%m-%d"},
+        "valueMap": {"type": "object", "additionalProperties": {"type": "string"}},
+        "required": {"type": "boolean"}
+      }
+    },
+    "step": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "title", "action"],
+      "properties": {
+        "id": {"type": "string", "pattern": "^[a-z0-9_]+$"},
+        "title": {"type": "string"},
+        "action": {"enum": ["NAVIGATE", "FILL_FORM", "CITIZEN_INPUT", "UPLOAD_DOCUMENTS", "REVIEW", "SUBMIT", "VERIFY_RECEIPT"]},
+        "url": {"type": "string"},
+        "fields": {"type": "array", "items": {"$ref": "#/$defs/formField"}},
+        "documents": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["category", "label", "required"],
+            "properties": {
+              "category": {"type": "string"},
+              "label": {"type": "string"},
+              "alternateLabels": {"type": "array", "items": {"type": "string"}},
+              "required": {"type": "boolean"}
+            }
+          }
+        },
+        "inputKind": {"enum": ["LOGIN", "OTP", "CAPTCHA", "DECLARATION", "PAYMENT"]},
+        "prompt": {"type": "string"},
+        "inputField": {"$ref": "#/$defs/target"},
+        "continueButton": {"$ref": "#/$defs/target"},
+        "precondition": {"$ref": "#/$defs/expectation"},
+        "expected": {"$ref": "#/$defs/expectation"},
+        "reviewFields": {"type": "array", "items": {"type": "string"}, "description": "form field keys whose values must appear on the review page"},
+        "retry": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "maxAttempts": {"type": "integer", "minimum": 1, "maximum": 5},
+            "backoffSeconds": {"type": "number", "minimum": 0, "maximum": 60}
+          }
+        }
+      }
+    },
+    "workflow": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["adapter", "entryUrl", "allowedDomains", "steps", "receipt"],
+      "properties": {
+        "adapter": {"type": "string", "pattern": "^[a-z0-9_]+$"},
+        "entryUrl": {"type": "string"},
+        "allowedDomains": {"type": "array", "items": {"type": "string"}, "minItems": 1},
+        "sessionExpiredMarkers": {"$ref": "#/$defs/expectation"},
+        "receipt": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["target", "pattern"],
+          "properties": {
+            "target": {"$ref": "#/$defs/target"},
+            "pattern": {"type": "string"},
+            "acknowledgementTarget": {"$ref": "#/$defs/target"},
+            "statusUrlTemplate": {"type": "string"},
+            "statusTextVisible": {"type": "string"}
+          }
+        },
+        "steps": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/step"}}
+      }
+    }
+  }
+}

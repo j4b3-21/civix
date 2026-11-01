@@ -1,0 +1,13 @@
+# CIVIX browser worker: isolated Playwright/Chromium. No debugging port is ever opened.
+FROM mcr.microsoft.com/playwright/python:v1.63.0-noble
+ENV PYTHONDONTWRITEBYTECODE=1 PYTHONUNBUFFERED=1 PIP_NO_CACHE_DIR=1 PLAYWRIGHT_BROWSERS_PATH=/ms-playwright
+WORKDIR /app
+COPY apps/agent/pyproject.toml ./
+RUN pip install .
+COPY apps/agent/app ./app
+RUN pip install --no-deps . && useradd --system --uid 10002 --home /app civixbrowser && chown -R civixbrowser /app
+USER civixbrowser
+EXPOSE 8001
+HEALTHCHECK --interval=15s --timeout=5s --start-period=30s --retries=5 \
+  CMD python -c "import urllib.request,sys; sys.exit(0 if urllib.request.urlopen('http://127.0.0.1:8001/internal/v1/health', timeout=4).status == 200 else 1)"
+CMD ["uvicorn", "app.browser.worker_api:app", "--host", "0.0.0.0", "--port", "8001", "--no-server-header"]

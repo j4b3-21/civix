@@ -1,0 +1,99 @@
+schemaVersion: "1.0"
+code: IN_CENTRAL_AICTE_SAKSHAM
+version: 1
+name: AICTE Saksham Scholarship Scheme for Specially-Abled Students (Degree and Diploma)
+summary: ₹50,000 a year for students with at least 40% disability admitted to AICTE-approved technical degree or diploma courses, family income up to ₹8 lakh.
+description: >
+  A Ministry of Education scheme implemented by the All India Council for Technical Education (AICTE) to support
+  specially-abled students pursuing technical education at diploma and degree level in AICTE-approved institutions.
+department: All India Council for Technical Education (AICTE)
+ministry: Ministry of Education
+category: SCHOLARSHIPS
+tags: [disability, technical-education, aicte, degree, diploma, nsp]
+jurisdiction: {level: CENTRAL, states: []}
+officialUrl: https://scholarships.gov.in
+portalDomains: [scholarships.gov.in]
+verificationStatus: SOURCE_VERIFIED
+verificationNote: >
+  Rules checked on 2026-11-01 against the AICTE Saksham guidelines for 2020-21 (copy hosted by SKIT Jaipur) and the
+  MyGov scheme page. The current-year AICTE notice was not retrieved; amounts and conditions may have been revised.
+automationStatus: GUIDED
+automationNote: Applications are filed on NSP after One-Time Registration. CIVIX has no authorization to automate NSP.
+isTestService: false
+lastVerifiedAt: 2026-11-01
+deadline: null
+benefits:
+  - "₹50,000 per year for every year of study (maximum 4 years for first-year admits, 3 years for lateral-entry admits)."
+  - Covers college fees, computer, stationery, books, equipment and software.
+sources:
+  - id: saksham_guidelines_2020
+    url: https://www.skit.ac.in/images/AICTE_2012_G.pdf
+    title: "Guidelines for AICTE – Saksham Scholarship Scheme for Specially-Abled Student (Degree), 2020-21"
+    kind: GUIDELINES
+    retrievedAt: 2026-11-01
+    publisher: AICTE (copy hosted by SKIT Jaipur)
+  - id: mygov_saksham
+    url: https://transformingindia.mygov.in/scheme/saksham-scholarship-by-aicte-for-differently-abled-students-pursuing-technical-education/
+    title: "MyGov — Saksham Scholarship by AICTE for Differently Abled Students"
+    kind: OFFICIAL_PORTAL
+    retrievedAt: 2026-11-01
+    publisher: MyGov, Government of India
+eligibility:
+  rules:
+    - id: disability_at_least_40
+      version: 1
+      field: disability_percentage
+      operator: GREATER_THAN_OR_EQUAL
+      value: 40
+      description: Disability of not less than 40%.
+      sourceId: saksham_guidelines_2020
+      excerpt: "having disability of not less than 40%"
+    - id: family_income_limit
+      version: 1
+      field: annual_family_income
+      operator: LESS_THAN_OR_EQUAL
+      value: 800000
+      description: Family income from all sources not more than ₹8 lakh per annum.
+      sourceId: saksham_guidelines_2020
+    - id: first_year_or_lateral_entry
+      version: 1
+      field: admission_mode
+      operator: IN
+      value: [FIRST_YEAR, LATERAL_ENTRY_SECOND_YEAR]
+      description: Admitted to the first year of a degree/diploma course, or the second year through lateral entry.
+      sourceId: saksham_guidelines_2020
+    - id: aicte_approved_institution
+      version: 1
+      field: institution_aicte_approved
+      operator: EQUALS
+      value: true
+      description: Studying in an AICTE-approved institution.
+      sourceId: saksham_guidelines_2020
+    - id: technical_programme
+      version: 1
+      field: course_is_technical
+      operator: EQUALS
+      value: true
+      description: Pursuing a technical degree or diploma programme.
+      sourceId: mygov_saksham
+    - id: degree_or_diploma
+      version: 1
+      field: education_level
+      operator: IN
+      value: [DIPLOMA, UNDERGRADUATE]
+      description: Diploma or degree level.
+      sourceId: mygov_saksham
+  notEvaluated:
+    - A valid disability certificate from the competent authority is required; CIVIX does not verify certificates.
+requiredDocuments:
+  - {category: DISABILITY_CERTIFICATE, description: Disability certificate issued by the competent authority, mandatory: true}
+  - {category: INCOME_CERTIFICATE, description: Income certificate issued by the State/UT Government, mandatory: true}
+  - {category: ACADEMIC_RECORD, description: Marksheet of the qualifying examination and admission letter, mandatory: true}
+  - {category: IDENTITY_PROOF, description: Aadhaar, mandatory: true}
+  - {category: BANK_DOCUMENT, description: Aadhaar-seeded bank account in the student's name, mandatory: true}
+procedure:
+  - {order: 1, title: Register on NSP, description: Complete One-Time Registration on the National Scholarships Portal.}
+  - {order: 2, title: Apply, description: Select the AICTE Saksham scheme (degree or diploma) and fill in the application.}
+  - {order: 3, title: Verification, description: "The institute verifies the application; the State/UT Directorate of Technical Education performs second-level scrutiny."}
+  - {order: 4, title: Payment, description: The scholarship is paid by DBT.}
+workflow: null

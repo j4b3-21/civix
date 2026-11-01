@@ -1,0 +1,13 @@
+package com.civix.agent.domain;
+
+public enum AgentName {
+    ORCHESTRATOR,
+    PROFILE_AGENT,
+    DISCOVERY_AGENT,
+    ELIGIBILITY_AGENT,
+    DOCUMENT_AGENT,
+    PLANNING_AGENT,
+    BROWSER_AGENT,
+    RECOVERY_AGENT,
+    VERIFICATION_AGENT
+}

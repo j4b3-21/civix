@@ -1,0 +1,264 @@
+# CIVIX citizen profile field catalog.
+# Every field states WHY it is collected (purpose). Fields not needed by any registered service should not be added.
+# Keys are the only valid profile field identifiers across the platform (eligibility rules, workflow field mappings, extraction mapping).
+version: "2026.11.1"
+fields:
+  # --- identity -------------------------------------------------------------
+  - key: full_name
+    label: Full name (as on official records)
+    type: STRING
+    group: identity
+    purpose: Filled into application forms; matched against names on uploaded certificates.
+    sensitivity: MEDIUM
+    core: true
+    maxLength: 120
+  - key: date_of_birth
+    label: Date of birth
+    type: DATE
+    group: identity
+    purpose: Age-based eligibility rules and application forms.
+    sensitivity: MEDIUM
+    core: true
+  - key: gender
+    label: Gender
+    type: ENUM
+    group: identity
+    purpose: Gender-specific schemes (e.g. scholarships for girl students) and application forms.
+    sensitivity: MEDIUM
+    core: true
+    options: [FEMALE, MALE, TRANSGENDER, OTHER, PREFER_NOT_TO_SAY]
+  - key: nationality
+    label: Nationality
+    type: ENUM
+    group: identity
+    purpose: Most schemes are restricted to Indian nationals.
+    sensitivity: LOW
+    core: false
+    options: [INDIAN, OTHER]
+
+  # --- contact --------------------------------------------------------------
+  - key: mobile_number
+    label: Mobile number
+    type: STRING
+    group: contact
+    purpose: Portal sign-in (the portal sends the OTP to this number; CIVIX never reads it) and application forms.
+    sensitivity: MEDIUM
+    core: true
+    pattern: "^[6-9][0-9]{9}$"
+  - key: email
+    label: Email address for applications
+    type: STRING
+    group: contact
+    purpose: Application forms that ask for an email address.
+    sensitivity: MEDIUM
+    core: false
+    pattern: "^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$"
+
+  # --- address ----------------------------------------------------------------
+  - key: address_line
+    label: Address
+    type: STRING
+    group: address
+    purpose: Application forms requiring a correspondence address.
+    sensitivity: MEDIUM
+    core: false
+    maxLength: 300
+  - key: state_code
+    label: State / Union Territory of residence
+    type: ENUM
+    group: address
+    purpose: Shows state services for where you live; application forms.
+    sensitivity: LOW
+    core: true
+    optionsFrom: jurisdictions
+  - key: district
+    label: District
+    type: STRING
+    group: address
+    purpose: District-level services and application forms.
+    sensitivity: LOW
+    core: false
+    maxLength: 80
+  - key: pincode
+    label: PIN code
+    type: STRING
+    group: address
+    purpose: Application forms.
+    sensitivity: LOW
+    core: false
+    pattern: "^[1-9][0-9]{5}$"
+  - key: domicile_state_code
+    label: State / UT of domicile
+    type: ENUM
+    group: address
+    purpose: State schemes restricted to domiciles of that State/UT (may differ from where you currently live).
+    sensitivity: LOW
+    core: false
+    optionsFrom: jurisdictions
+
+  # --- education ----------------------------------------------------------------
+  - key: education_level
+    label: Current level of study
+    type: ENUM
+    group: education
+    purpose: Matching education and scholarship schemes to your stage of study.
+    sensitivity: LOW
+    core: true
+    options: [NOT_STUDYING, SCHOOL_SECONDARY, SCHOOL_HIGHER_SECONDARY, DIPLOMA, UNDERGRADUATE, POSTGRADUATE, DOCTORAL]
+  - key: course_type
+    label: Mode of study
+    type: ENUM
+    group: education
+    purpose: Several scholarships cover only regular (not distance/correspondence) courses.
+    sensitivity: LOW
+    core: false
+    options: [REGULAR, DISTANCE, CORRESPONDENCE]
+  - key: course_name
+    label: Course name
+    type: STRING
+    group: education
+    purpose: Application forms.
+    sensitivity: LOW
+    core: false
+    maxLength: 150
+  - key: course_is_technical
+    label: Is your course a technical programme (engineering, pharmacy, architecture, etc.)?
+    type: BOOLEAN
+    group: education
+    purpose: Technical-education schemes (e.g. AICTE scholarships).
+    sensitivity: LOW
+    core: false
+  - key: institution_name
+    label: Institution name
+    type: STRING
+    group: education
+    purpose: Application forms.
+    sensitivity: LOW
+    core: false
+    maxLength: 200
+  - key: institution_aicte_approved
+    label: Is your institution AICTE-approved?
+    type: BOOLEAN
+    group: education
+    purpose: AICTE schemes require an AICTE-approved institution.
+    sensitivity: LOW
+    core: false
+  - key: admission_mode
+    label: Admission year / mode
+    type: ENUM
+    group: education
+    purpose: Some schemes accept only first-year or lateral-entry second-year students as fresh applicants.
+    sensitivity: LOW
+    core: false
+    options: [FIRST_YEAR, LATERAL_ENTRY_SECOND_YEAR, CONTINUING]
+  - key: current_year_of_study
+    label: Current year of study
+    type: INTEGER
+    group: education
+    purpose: Application forms and renewal rules.
+    sensitivity: LOW
+    core: false
+    min: 1
+    max: 7
+  - key: class12_percentage
+    label: Class XII marks (%)
+    type: NUMBER
+    group: education
+    purpose: Merit-based eligibility and application forms.
+    sensitivity: LOW
+    core: false
+    min: 0
+    max: 100
+  - key: class12_board_percentile
+    label: Class XII percentile within your board and stream
+    type: NUMBER
+    group: education
+    purpose: Merit scholarships defined by board percentile (e.g. above the 80th percentile).
+    sensitivity: LOW
+    core: false
+    min: 0
+    max: 100
+  - key: receiving_other_scholarship
+    label: Are you currently receiving any other scholarship or fee waiver?
+    type: BOOLEAN
+    group: education
+    purpose: Several schemes exclude students who already receive another scholarship.
+    sensitivity: LOW
+    core: false
+
+  # --- employment & income -----------------------------------------------------------
+  - key: employment_status
+    label: Employment status
+    type: ENUM
+    group: employment
+    purpose: Employment and welfare scheme matching.
+    sensitivity: LOW
+    core: false
+    options: [STUDENT, EMPLOYED, SELF_EMPLOYED, UNEMPLOYED, HOMEMAKER, RETIRED]
+  - key: annual_family_income
+    label: Annual family income from all sources
+    type: INTEGER
+    group: income
+    purpose: Income ceilings are the most common eligibility rule for welfare and scholarship schemes.
+    sensitivity: HIGH
+    core: true
+    unit: INR
+    min: 0
+    max: 1000000000
+
+  # --- social -----------------------------------------------------------------------------
+  - key: social_category
+    label: Social category
+    type: ENUM
+    group: social
+    purpose: Category-specific schemes (e.g. post-matric scholarships for SC students). Only used for schemes you look at.
+    sensitivity: HIGH
+    core: false
+    options: [GENERAL, EWS, OBC, SC, ST]
+  - key: disability_percentage
+    label: Benchmark disability (%) as per certificate
+    type: NUMBER
+    group: social
+    purpose: Schemes for persons with disabilities (e.g. at least 40% disability).
+    sensitivity: HIGH
+    core: false
+    min: 0
+    max: 100
+  - key: girl_children_in_family_availing
+    label: Number of girl children in your family (including you) applying for / receiving this kind of scholarship
+    type: INTEGER
+    group: social
+    purpose: Some schemes allow at most two girl children per family.
+    sensitivity: LOW
+    core: false
+    min: 0
+    max: 20
+
+  # --- banking (no account numbers are stored) ------------------------------------------------
+  - key: bank_account_aadhaar_seeded
+    label: Do you have an Aadhaar-seeded bank account in your own name?
+    type: BOOLEAN
+    group: banking
+    purpose: Direct Benefit Transfer schemes pay only into Aadhaar-seeded accounts. CIVIX does not store account numbers.
+    sensitivity: LOW
+    core: false
+
+  # --- business ---------------------------------------------------------------------------
+  - key: enterprise_investment_inr
+    label: Enterprise investment in plant & machinery / equipment (INR)
+    type: INTEGER
+    group: business
+    purpose: MSME classification for business registration services.
+    sensitivity: MEDIUM
+    core: false
+    unit: INR
+    min: 0
+  - key: enterprise_turnover_inr
+    label: Enterprise annual turnover (INR)
+    type: INTEGER
+    group: business
+    purpose: MSME classification for business registration services.
+    sensitivity: MEDIUM
+    core: false
+    unit: INR
+    min: 0

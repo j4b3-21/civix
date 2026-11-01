@@ -1,0 +1,53 @@
+#!/bin/sh
+# ----------------------------------------------------------------------------
+# Minimal Maven wrapper ("only-script" style) for CIVIX.
+# Reads distributionUrl from .mvn/wrapper/maven-wrapper.properties, downloads and
+# unpacks that Maven distribution once into ${MAVEN_USER_HOME:-$HOME/.m2}/wrapper/dists
+# and runs it. If MVNW_REPOURL is set, it replaces https://repo.maven.apache.org/maven2.
+# ----------------------------------------------------------------------------
+set -eu
+
+BASE_DIR=$(cd "$(dirname "$0")" && pwd)
+PROPS="$BASE_DIR/.mvn/wrapper/maven-wrapper.properties"
+[ -f "$PROPS" ] || { echo "mvnw: missing $PROPS" >&2; exit 1; }
+
+DIST_URL=$(sed -n 's/^distributionUrl=//p' "$PROPS" | tr -d '\r')
+[ -n "$DIST_URL" ] || { echo "mvnw: distributionUrl not set" >&2; exit 1; }
+if [ -n "${MVNW_REPOURL:-}" ]; then
+  DIST_URL="${MVNW_REPOURL%/}/${DIST_URL#*maven2/}"
+fi
+
+DIST_FILE=$(basename "$DIST_URL")
+DIST_NAME=${DIST_FILE%-bin.zip}
+DIST_NAME=${DIST_NAME%-bin.tar.gz}
+HASH=$(printf '%s' "$DIST_URL" | cksum | cut -d' ' -f1)
+MAVEN_HOME_DIR="${MAVEN_USER_HOME:-$HOME/.m2}/wrapper/dists/$DIST_NAME/$HASH"
+
+if [ ! -x "$MAVEN_HOME_DIR/$DIST_NAME/bin/mvn" ]; then
+  mkdir -p "$MAVEN_HOME_DIR"
+  TMP_DIR=$(mktemp -d)
+  trap 'rm -rf "$TMP_DIR"' EXIT
+  echo "mvnw: downloading $DIST_URL" >&2
+  if command -v curl >/dev/null 2>&1; then
+    curl -fsSL -o "$TMP_DIR/$DIST_FILE" "$DIST_URL"
+  elif command -v wget >/dev/null 2>&1; then
+    wget -q -O "$TMP_DIR/$DIST_FILE" "$DIST_URL"
+  else
+    echo "mvnw: need curl or wget to download Maven" >&2; exit 1
+  fi
+  case "$DIST_FILE" in
+    *.zip)
+      if command -v unzip >/dev/null 2>&1; then
+        unzip -q "$TMP_DIR/$DIST_FILE" -d "$TMP_DIR/x"
+      else
+        mkdir -p "$TMP_DIR/x" && (cd "$TMP_DIR/x" && jar xf "$TMP_DIR/$DIST_FILE")
+      fi ;;
+    *) mkdir -p "$TMP_DIR/x" && tar -xzf "$TMP_DIR/$DIST_FILE" -C "$TMP_DIR/x" ;;
+  esac
+  rm -rf "${MAVEN_HOME_DIR:?}/$DIST_NAME"
+  mv "$TMP_DIR/x/$DIST_NAME" "$MAVEN_HOME_DIR/$DIST_NAME"
+  chmod +x "$MAVEN_HOME_DIR/$DIST_NAME/bin/mvn"
+fi
+
+export MAVEN_PROJECTBASEDIR="$BASE_DIR"
+exec "$MAVEN_HOME_DIR/$DIST_NAME/bin/mvn" "$@"

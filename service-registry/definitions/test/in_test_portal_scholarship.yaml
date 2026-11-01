@@ -1,0 +1,166 @@
+# AUTHORIZED TEST ENVIRONMENT — NOT A GOVERNMENT SERVICE.
+# This definition drives the local CIVIX Test Portal (infrastructure/test-portal). It exists so the full browser workflow
+# (sign-in with OTP, form filling, document upload, declaration, review, approval-gated submission, receipt verification,
+# and recovery paths) can be executed and tested end-to-end without touching any real government portal.
+# It is hidden unless CIVIX_ENABLE_TEST_SERVICES=true and every receipt it yields is stored as is_test_environment=true.
+schemaVersion: "1.0"
+code: IN_TEST_PORTAL_SCHOLARSHIP
+version: 1
+name: "CIVIX Test Portal — Demo Merit Scholarship (test environment)"
+summary: "Test-only scholarship on the local CIVIX Test Portal, used to exercise the complete autonomous application workflow."
+description: >
+  This is not a real scheme. The CIVIX Test Portal is a local application maintained in this repository that imitates the
+  shape of a typical scholarship portal (OTP sign-in, multi-page form, uploads, declaration, review, acknowledgement) so
+  that CIVIX's browser engine can be verified safely. Nothing submitted here reaches any government system.
+department: CIVIX engineering (test environment)
+ministry: null
+category: SCHOLARSHIPS
+tags: [test-environment, demo]
+jurisdiction: {level: CENTRAL, states: []}
+officialUrl: "${TEST_PORTAL_URL}/"
+portalDomains: [test-portal, localhost, 127.0.0.1]
+verificationStatus: WORKFLOW_VERIFIED
+verificationNote: Verified only against the local CIVIX Test Portal by the automated end-to-end suite (apps/agent/tests/e2e).
+automationStatus: TEST_ONLY
+automationNote: Runs against the local test portal only.
+isTestService: true
+lastVerifiedAt: 2026-11-01
+deadline: null
+benefits:
+  - "None — test environment."
+sources:
+  - id: test_portal
+    url: "${TEST_PORTAL_URL}/"
+    title: CIVIX Test Portal (authorized local test environment)
+    kind: TEST_ENVIRONMENT
+    retrievedAt: 2026-11-01
+eligibility:
+  rules:
+    - id: income_limit
+      version: 1
+      field: annual_family_income
+      operator: LESS_THAN_OR_EQUAL
+      value: 600000
+      description: "Test rule: annual family income up to ₹6,00,000."
+      sourceId: test_portal
+    - id: class12_marks
+      version: 1
+      field: class12_percentage
+      operator: GREATER_THAN_OR_EQUAL
+      value: 60
+      description: "Test rule: at least 60% in Class XII."
+      sourceId: test_portal
+    - id: study_level
+      version: 1
+      field: education_level
+      operator: IN
+      value: [DIPLOMA, UNDERGRADUATE, POSTGRADUATE]
+      description: "Test rule: diploma, undergraduate or postgraduate student."
+      sourceId: test_portal
+  notEvaluated: []
+requiredDocuments:
+  - {category: INCOME_CERTIFICATE, description: Income certificate (any PDF/PNG/JPEG for testing), mandatory: true}
+  - {category: ACADEMIC_RECORD, description: Class XII marksheet (any PDF/PNG/JPEG for testing), mandatory: true}
+procedure:
+  - {order: 1, title: Sign in, description: Sign in with your mobile number and the OTP shown in the test inbox.}
+  - {order: 2, title: Fill the form, description: Personal and academic details are filled from your CIVIX profile.}
+  - {order: 3, title: Upload documents, description: Approved documents are uploaded.}
+  - {order: 4, title: Declare and submit, description: You confirm the declaration and approve the final submission.}
+workflow:
+  adapter: test_portal
+  entryUrl: "${TEST_PORTAL_URL}/apply"
+  allowedDomains: [test-portal, localhost, 127.0.0.1]
+  sessionExpiredMarkers: {textVisible: "Your session has expired"}
+  receipt:
+    target: {testId: reference-number}
+    pattern: "^TP-[0-9]{4}-[0-9]{6}$"
+    acknowledgementTarget: {testId: acknowledgement}
+    statusUrlTemplate: "${TEST_PORTAL_URL}/status?ref={reference}"
+    statusTextVisible: "Received"
+  steps:
+    - id: open_portal
+      title: Open the application page
+      action: NAVIGATE
+      url: "${TEST_PORTAL_URL}/apply"
+      expected: {headingVisible: "Sign in"}
+    - id: sign_in
+      title: Enter mobile number
+      action: FILL_FORM
+      precondition: {headingVisible: "Sign in"}
+      fields:
+        - {key: mobile, profileField: mobile_number, label: Mobile number, inputType: tel, required: true}
+      continueButton: {role: button, label: Send OTP}
+      expected: {headingVisible: "Verify OTP"}
+    - id: verify_otp
+      title: Enter the OTP sent to your phone
+      action: CITIZEN_INPUT
+      inputKind: OTP
+      prompt: "Enter the one-time password the portal sent to your registered mobile number."
+      inputField: {label: One-time password}
+      continueButton: {role: button, label: Verify OTP}
+      expected: {headingVisible: "Personal details"}
+    - id: personal_details
+      title: Personal details
+      action: FILL_FORM
+      precondition: {headingVisible: "Personal details"}
+      fields:
+        - {key: full_name, profileField: full_name, label: Full name, inputType: text, required: true}
+        - {key: dob, profileField: date_of_birth, label: Date of birth, inputType: date, format: "%Y-%m-%d", required: true}
+        - key: gender
+          profileField: gender
+          label: Gender
+          inputType: select
+          required: true
+          valueMap: {FEMALE: Female, MALE: Male, TRANSGENDER: Transgender, OTHER: Other, PREFER_NOT_TO_SAY: Other}
+        - {key: email, profileField: email, label: Email address, inputType: email, required: false}
+        - {key: state, profileField: state_code, label: State, inputType: select, required: true}
+      continueButton: {role: button, label: Save and continue}
+      expected: {headingVisible: "Academic and income details"}
+    - id: academic_details
+      title: Academic and income details
+      action: FILL_FORM
+      precondition: {headingVisible: "Academic and income details"}
+      fields:
+        - key: course_level
+          profileField: education_level
+          label: Course level
+          inputType: select
+          required: true
+          valueMap: {DIPLOMA: Diploma, UNDERGRADUATE: Undergraduate, POSTGRADUATE: Postgraduate}
+        - {key: course_name, profileField: course_name, label: Course name, inputType: text, required: true}
+        - {key: institution, profileField: institution_name, label: Institution name, inputType: text, required: true}
+        - {key: class12, profileField: class12_percentage, label: Class XII percentage, inputType: number, required: true}
+        - {key: income, profileField: annual_family_income, label: Annual family income, inputType: number, required: true}
+      continueButton: {role: button, label: Save and continue}
+      expected: {headingVisible: "Upload documents"}
+    - id: upload_documents
+      title: Upload documents
+      action: UPLOAD_DOCUMENTS
+      precondition: {headingVisible: "Upload documents"}
+      documents:
+        - {category: INCOME_CERTIFICATE, label: Income certificate, required: true}
+        - {category: ACADEMIC_RECORD, label: Class XII marksheet, required: true}
+      continueButton: {role: button, label: Upload and continue}
+      expected: {headingVisible: "Declaration"}
+    - id: declaration
+      title: Confirm the declaration
+      action: CITIZEN_INPUT
+      inputKind: DECLARATION
+      prompt: "The portal asks you to declare: 'I declare that the information provided is true and correct to the best of my knowledge.' Type ACCEPT to confirm this declaration yourself."
+      inputField: {label: "I declare that the information provided is true and correct to the best of my knowledge."}
+      continueButton: {role: button, label: Continue to review}
+      expected: {headingVisible: "Review your application"}
+    - id: review
+      title: Review the application
+      action: REVIEW
+      precondition: {headingVisible: "Review your application"}
+      reviewFields: [full_name, course_name, institution, income]
+    - id: submit
+      title: Submit the application
+      action: SUBMIT
+      continueButton: {role: button, label: Submit application}
+      expected: {headingVisible: "Application submitted"}
+      retry: {maxAttempts: 1, backoffSeconds: 0}
+    - id: verify_receipt
+      title: Verify the acknowledgement
+      action: VERIFY_RECEIPT

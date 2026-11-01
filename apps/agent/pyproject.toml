@@ -1,0 +1,56 @@
+[build-system]
+requires = ["setuptools>=75", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "civix-agent"
+version = "0.1.0"
+description = "CIVIX agent service: registry validation, eligibility engine, document intelligence, LangGraph orchestration and Playwright browser worker."
+requires-python = ">=3.12"
+dependencies = [
+  "fastapi==0.120.4",
+  "uvicorn[standard]==0.54.0",
+  "pydantic==2.14.2",
+  "pydantic-settings==2.16.2",
+  "langgraph==1.2.19",
+  "langgraph-checkpoint==4.3.1",
+  "langgraph-checkpoint-postgres==3.2.0",
+  "psycopg[binary,pool]==3.3.6",
+  "psycopg-pool==3.3.3",
+  "httpx==0.28.1",
+  "playwright==1.63.0",
+  "PyYAML==6.0.3",
+  "jsonschema==4.26.0",
+  "structlog==26.1.0",
+  "prometheus-client==0.26.0",
+  "boto3==1.43.123",
+  "pypdf==6.21.4",
+  "pypdfium2==5.14.0",
+  "pytesseract==0.3.13",
+  "pillow==13.0.0",
+  "python-multipart==0.0.33",
+  "RapidFuzz==3.14.6",
+  "Jinja2==3.1.6",
+]
+
+[project.optional-dependencies]
+test = [
+  "pytest==9.2.0",
+  "pytest-asyncio==1.4.1",
+  "reportlab==5.1.0",
+  "moto[server]==5.2.5",
+]
+
+[tool.setuptools.packages.find]
+include = ["app*"]
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+asyncio_default_fixture_loop_scope = "function"
+testpaths = ["tests"]
+markers = [
+  "postgres: requires a PostgreSQL database (CIVIX_TEST_DATABASE_URL)",
+  "browser: launches Chromium via Playwright",
+  "e2e: full workflow against the local CIVIX Test Portal",
+]
+filterwarnings = ["ignore::DeprecationWarning:botocore.*"]

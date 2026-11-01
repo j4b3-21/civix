@@ -1,0 +1,33 @@
+Metadata-Version: 2.4
+Name: civix-agent
+Version: 0.1.0
+Summary: CIVIX agent service: registry validation, eligibility engine, document intelligence, LangGraph orchestration and Playwright browser worker.
+Requires-Python: >=3.12
+Requires-Dist: fastapi==0.120.4
+Requires-Dist: uvicorn[standard]==0.54.0
+Requires-Dist: pydantic==2.14.2
+Requires-Dist: pydantic-settings==2.16.2
+Requires-Dist: langgraph==1.2.19
+Requires-Dist: langgraph-checkpoint==4.3.1
+Requires-Dist: langgraph-checkpoint-postgres==3.2.0
+Requires-Dist: psycopg[binary,pool]==3.3.6
+Requires-Dist: psycopg-pool==3.3.3
+Requires-Dist: httpx==0.28.1
+Requires-Dist: playwright==1.63.0
+Requires-Dist: PyYAML==6.0.3
+Requires-Dist: jsonschema==4.26.0
+Requires-Dist: structlog==26.1.0
+Requires-Dist: prometheus-client==0.26.0
+Requires-Dist: boto3==1.43.123
+Requires-Dist: pypdf==6.21.4
+Requires-Dist: pypdfium2==5.14.0
+Requires-Dist: pytesseract==0.3.13
+Requires-Dist: pillow==13.0.0
+Requires-Dist: python-multipart==0.0.33
+Requires-Dist: RapidFuzz==3.14.6
+Requires-Dist: Jinja2==3.1.6
+Provides-Extra: test
+Requires-Dist: pytest==9.2.0; extra == "test"
+Requires-Dist: pytest-asyncio==1.4.1; extra == "test"
+Requires-Dist: reportlab==5.1.0; extra == "test"
+Requires-Dist: moto[server]==5.2.5; extra == "test"

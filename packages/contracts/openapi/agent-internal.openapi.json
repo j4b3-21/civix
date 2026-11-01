@@ -1,0 +1,1303 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "CIVIX agent internal API",
+    "description": "Internal only. Authorization: Bearer AGENT_INTERNAL_TOKEN. See docs/AGENT_CONTRACTS.md \u00a73.",
+    "version": "0.1.0"
+  },
+  "paths": {
+    "/internal/v1/health": {
+      "get": {
+        "summary": "Health",
+        "operationId": "health_internal_v1_health_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": true,
+                  "type": "object",
+                  "title": "Response Health Internal V1 Health Get"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/internal/v1/ready": {
+      "get": {
+        "summary": "Ready",
+        "operationId": "ready_internal_v1_ready_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/internal/v1/metrics": {
+      "get": {
+        "summary": "Metrics",
+        "operationId": "metrics_internal_v1_metrics_get",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/internal/v1/registry/services": {
+      "get": {
+        "summary": "Registry Services",
+        "operationId": "registry_services_internal_v1_registry_services_get",
+        "parameters": [
+          {
+            "name": "includeTest",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "boolean",
+              "default": false,
+              "title": "Includetest"
+            }
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": true,
+                  "title": "Response Registry Services Internal V1 Registry Services Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/internal/v1/registry/profile-fields": {
+      "get": {
+        "summary": "Registry Fields",
+        "operationId": "registry_fields_internal_v1_registry_profile_fields_get",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": true,
+                  "title": "Response Registry Fields Internal V1 Registry Profile Fields Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/internal/v1/eligibility/evaluate": {
+      "post": {
+        "summary": "Eligibility",
+        "operationId": "eligibility_internal_v1_eligibility_evaluate_post",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EligibilityRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": true,
+                  "title": "Response Eligibility Internal V1 Eligibility Evaluate Post"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/internal/v1/discovery": {
+      "post": {
+        "summary": "Discovery",
+        "operationId": "discovery_internal_v1_discovery_post",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DiscoveryRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": true,
+                  "title": "Response Discovery Internal V1 Discovery Post"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/internal/v1/documents/extract": {
+      "post": {
+        "summary": "Extract",
+        "operationId": "extract_internal_v1_documents_extract_post",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ExtractRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": true,
+                  "title": "Response Extract Internal V1 Documents Extract Post"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/internal/v1/tasks": {
+      "post": {
+        "summary": "Start Task",
+        "operationId": "start_task_internal_v1_tasks_post",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/StartTaskRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "202": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": true,
+                  "title": "Response Start Task Internal V1 Tasks Post"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/internal/v1/tasks/{task_id}": {
+      "get": {
+        "summary": "Get Task",
+        "operationId": "get_task_internal_v1_tasks__task_id__get",
+        "parameters": [
+          {
+            "name": "task_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Task Id"
+            }
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": true,
+                  "title": "Response Get Task Internal V1 Tasks  Task Id  Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/internal/v1/tasks/{task_id}/resume": {
+      "post": {
+        "summary": "Resume",
+        "operationId": "resume_internal_v1_tasks__task_id__resume_post",
+        "parameters": [
+          {
+            "name": "task_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Task Id"
+            }
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ResumeRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "202": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": true,
+                  "title": "Response Resume Internal V1 Tasks  Task Id  Resume Post"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/internal/v1/tasks/{task_id}/cancel": {
+      "post": {
+        "summary": "Cancel",
+        "operationId": "cancel_internal_v1_tasks__task_id__cancel_post",
+        "parameters": [
+          {
+            "name": "task_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Task Id"
+            }
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "anyOf": [
+                  {
+                    "$ref": "#/components/schemas/CancelRequest"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "title": "Body"
+              }
+            }
+          }
+        },
+        "responses": {
+          "202": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": true,
+                  "title": "Response Cancel Internal V1 Tasks  Task Id  Cancel Post"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "ApprovalDecision": {
+        "type": "string",
+        "enum": [
+          "APPROVE",
+          "REJECT"
+        ],
+        "title": "ApprovalDecision"
+      },
+      "ApprovalKind": {
+        "type": "string",
+        "enum": [
+          "PREPARATION",
+          "DOCUMENT_UPLOAD",
+          "FINAL_SUBMISSION"
+        ],
+        "title": "ApprovalKind"
+      },
+      "ApprovalResume": {
+        "properties": {
+          "approvalId": {
+            "type": "string",
+            "title": "Approvalid"
+          },
+          "approvalKind": {
+            "$ref": "#/components/schemas/ApprovalKind"
+          },
+          "decision": {
+            "$ref": "#/components/schemas/ApprovalDecision"
+          },
+          "token": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 4096
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Token"
+          },
+          "payloadDigest": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Payloaddigest"
+          },
+          "expiresAt": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Expiresat"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "approvalId",
+          "approvalKind",
+          "decision"
+        ],
+        "title": "ApprovalResume"
+      },
+      "CancelRequest": {
+        "properties": {
+          "reason": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 300
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Reason"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "title": "CancelRequest"
+      },
+      "CitizenContext": {
+        "properties": {
+          "userId": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Userid"
+          },
+          "fields": {
+            "additionalProperties": {
+              "$ref": "#/components/schemas/ContextField"
+            },
+            "type": "object",
+            "title": "Fields"
+          },
+          "consents": {
+            "items": {
+              "$ref": "#/components/schemas/ConsentPurpose"
+            },
+            "type": "array",
+            "title": "Consents"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "title": "CitizenContext"
+      },
+      "CitizenInputResume": {
+        "properties": {
+          "requestId": {
+            "type": "string",
+            "title": "Requestid"
+          },
+          "value": {
+            "type": "string",
+            "maxLength": 200,
+            "minLength": 1,
+            "title": "Value"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "requestId",
+          "value"
+        ],
+        "title": "CitizenInputResume"
+      },
+      "ConsentPurpose": {
+        "type": "string",
+        "enum": [
+          "PROFILE_PROCESSING",
+          "DOCUMENT_PROCESSING",
+          "ELIGIBILITY_EVALUATION",
+          "AGENT_EXECUTION",
+          "PORTAL_DOCUMENT_UPLOAD"
+        ],
+        "title": "ConsentPurpose"
+      },
+      "ContextField": {
+        "properties": {
+          "value": {
+            "title": "Value"
+          },
+          "status": {
+            "$ref": "#/components/schemas/ProfileFieldStatus"
+          },
+          "source": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/FieldSource"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "sourceDocumentId": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Sourcedocumentid"
+          },
+          "confidence": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Confidence"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "status"
+        ],
+        "title": "ContextField"
+      },
+      "DiscoveryFilters": {
+        "properties": {
+          "state": {
+            "anyOf": [
+              {
+                "type": "string",
+                "pattern": "^IN-[A-Z]{2}$"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "State"
+          },
+          "category": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ServiceCategory"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "jurisdiction": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/JurisdictionLevel"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "title": "DiscoveryFilters"
+      },
+      "DiscoveryRequest": {
+        "properties": {
+          "query": {
+            "type": "string",
+            "maxLength": 500,
+            "minLength": 3,
+            "title": "Query"
+          },
+          "filters": {
+            "$ref": "#/components/schemas/DiscoveryFilters"
+          },
+          "citizenContext": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/CitizenContext"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "includeTest": {
+            "type": "boolean",
+            "title": "Includetest",
+            "default": false
+          },
+          "limit": {
+            "type": "integer",
+            "maximum": 50.0,
+            "minimum": 1.0,
+            "title": "Limit",
+            "default": 10
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "query"
+        ],
+        "title": "DiscoveryRequest"
+      },
+      "DocumentCategory": {
+        "type": "string",
+        "enum": [
+          "IDENTITY_PROOF",
+          "ADDRESS_PROOF",
+          "INCOME_CERTIFICATE",
+          "CASTE_CERTIFICATE",
+          "ACADEMIC_RECORD",
+          "BANK_DOCUMENT",
+          "RESIDENCE_CERTIFICATE",
+          "DISABILITY_CERTIFICATE",
+          "PHOTOGRAPH",
+          "OTHER"
+        ],
+        "title": "DocumentCategory"
+      },
+      "EligibilityRequest": {
+        "properties": {
+          "serviceCode": {
+            "type": "string",
+            "title": "Servicecode"
+          },
+          "citizenContext": {
+            "$ref": "#/components/schemas/CitizenContext"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "serviceCode",
+          "citizenContext"
+        ],
+        "title": "EligibilityRequest"
+      },
+      "ExtractRequest": {
+        "properties": {
+          "documentId": {
+            "type": "string",
+            "title": "Documentid"
+          },
+          "storageKey": {
+            "type": "string",
+            "pattern": "^users/[0-9a-fA-F-]{36}/documents/[0-9a-fA-F-]{36}$",
+            "title": "Storagekey"
+          },
+          "mimeType": {
+            "type": "string",
+            "enum": [
+              "application/pdf",
+              "image/png",
+              "image/jpeg"
+            ],
+            "title": "Mimetype"
+          },
+          "declaredCategory": {
+            "$ref": "#/components/schemas/DocumentCategory"
+          },
+          "sha256": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Sha256"
+          },
+          "citizenContext": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/CitizenContext"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "otherDocuments": {
+            "items": {
+              "$ref": "#/components/schemas/OtherDocument"
+            },
+            "type": "array",
+            "title": "Otherdocuments"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "documentId",
+          "storageKey",
+          "mimeType",
+          "declaredCategory"
+        ],
+        "title": "ExtractRequest"
+      },
+      "FieldSource": {
+        "type": "string",
+        "enum": [
+          "USER_INPUT",
+          "DOCUMENT_EXTRACTION",
+          "VERIFIED_SOURCE"
+        ],
+        "title": "FieldSource"
+      },
+      "HTTPValidationError": {
+        "properties": {
+          "detail": {
+            "items": {
+              "$ref": "#/components/schemas/ValidationError"
+            },
+            "type": "array",
+            "title": "Detail"
+          }
+        },
+        "type": "object",
+        "title": "HTTPValidationError"
+      },
+      "Intent": {
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": [
+              "APPLY",
+              "DISCOVER"
+            ],
+            "title": "Type",
+            "default": "APPLY"
+          },
+          "text": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 1000
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Text"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "title": "Intent"
+      },
+      "JurisdictionLevel": {
+        "type": "string",
+        "enum": [
+          "CENTRAL",
+          "STATE"
+        ],
+        "title": "JurisdictionLevel"
+      },
+      "OtherDocument": {
+        "properties": {
+          "documentId": {
+            "type": "string",
+            "title": "Documentid"
+          },
+          "category": {
+            "$ref": "#/components/schemas/DocumentCategory"
+          },
+          "fields": {
+            "items": {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            "type": "array",
+            "title": "Fields"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "documentId",
+          "category"
+        ],
+        "title": "OtherDocument"
+      },
+      "ProfileFieldStatus": {
+        "type": "string",
+        "enum": [
+          "MISSING",
+          "PROVIDED",
+          "EXTRACTED",
+          "USER_CONFIRMED",
+          "VERIFIED"
+        ],
+        "title": "ProfileFieldStatus"
+      },
+      "ResumeRequest": {
+        "properties": {
+          "kind": {
+            "type": "string",
+            "enum": [
+              "APPROVAL",
+              "CITIZEN_INPUT",
+              "RETRY"
+            ],
+            "title": "Kind"
+          },
+          "approval": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ApprovalResume"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "citizenInput": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/CitizenInputResume"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "kind"
+        ],
+        "title": "ResumeRequest"
+      },
+      "ServiceCategory": {
+        "type": "string",
+        "enum": [
+          "EDUCATION",
+          "SCHOLARSHIPS",
+          "CERTIFICATES",
+          "IDENTITY",
+          "WELFARE",
+          "AGRICULTURE",
+          "BUSINESS",
+          "LICENSES",
+          "EMPLOYMENT",
+          "UTILITIES",
+          "OTHER"
+        ],
+        "title": "ServiceCategory"
+      },
+      "StartTaskRequest": {
+        "properties": {
+          "taskId": {
+            "type": "string",
+            "pattern": "^[0-9a-fA-F-]{36}$",
+            "title": "Taskid"
+          },
+          "applicationId": {
+            "type": "string",
+            "pattern": "^[0-9a-fA-F-]{36}$",
+            "title": "Applicationid"
+          },
+          "userId": {
+            "type": "string",
+            "pattern": "^[0-9a-fA-F-]{36}$",
+            "title": "Userid"
+          },
+          "serviceCode": {
+            "type": "string",
+            "maxLength": 80,
+            "title": "Servicecode"
+          },
+          "intent": {
+            "$ref": "#/components/schemas/Intent"
+          },
+          "citizenContext": {
+            "$ref": "#/components/schemas/CitizenContext"
+          },
+          "documents": {
+            "items": {
+              "$ref": "#/components/schemas/TaskDocument"
+            },
+            "type": "array",
+            "maxItems": 30,
+            "title": "Documents"
+          },
+          "dataVersion": {
+            "type": "integer",
+            "minimum": 1.0,
+            "title": "Dataversion"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "taskId",
+          "applicationId",
+          "userId",
+          "serviceCode",
+          "citizenContext",
+          "dataVersion"
+        ],
+        "title": "StartTaskRequest"
+      },
+      "TaskDocument": {
+        "properties": {
+          "documentId": {
+            "type": "string",
+            "title": "Documentid"
+          },
+          "category": {
+            "$ref": "#/components/schemas/DocumentCategory"
+          },
+          "storageKey": {
+            "type": "string",
+            "title": "Storagekey"
+          },
+          "mimeType": {
+            "type": "string",
+            "title": "Mimetype"
+          },
+          "sha256": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Sha256"
+          },
+          "fileName": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Filename"
+          },
+          "reviewed": {
+            "type": "boolean",
+            "title": "Reviewed",
+            "default": false
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "documentId",
+          "category",
+          "storageKey",
+          "mimeType"
+        ],
+        "title": "TaskDocument"
+      },
+      "ValidationError": {
+        "properties": {
+          "loc": {
+            "items": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "integer"
+                }
+              ]
+            },
+            "type": "array",
+            "title": "Location"
+          },
+          "msg": {
+            "type": "string",
+            "title": "Message"
+          },
+          "type": {
+            "type": "string",
+            "title": "Error Type"
+          }
+        },
+        "type": "object",
+        "required": [
+          "loc",
+          "msg",
+          "type"
+        ],
+        "title": "ValidationError"
+      }
+    }
+  }
+}

@@ -1,0 +1,131 @@
+services:
+  - type: web
+    name: civix-api
+    runtime: docker
+    dockerContext: apps/api
+    dockerfilePath: apps/api/Dockerfile
+    healthCheckPath: /actuator/health/liveness
+    plan: free
+    envVars:
+      - key: CIVIX_ENV
+        value: production
+      - key: CIVIX_PUBLIC_URL
+        sync: false
+      - key: CIVIX_DB_URL
+        sync: false
+      - key: CIVIX_DB_USER
+        sync: false
+      - key: CIVIX_DB_PASSWORD
+        sync: false
+      - key: REDIS_HOST
+        sync: false
+      - key: REDIS_PORT
+        value: "6379"
+      - key: REDIS_PASSWORD
+        sync: false
+      - key: AGENT_INTERNAL_URL
+        value: http://civix-agent:8000
+      - key: AGENT_INTERNAL_TOKEN
+        sync: false
+      - key: API_INTERNAL_TOKEN
+        sync: false
+      - key: JWT_SECRET
+        sync: false
+      - key: APPROVAL_SIGNING_SECRET
+        sync: false
+      - key: AUDIT_IP_PEPPER
+        sync: false
+      - key: COOKIE_SECURE
+        value: "true"
+      - key: CIVIX_ENABLE_TEST_SERVICES
+        value: "false"
+      - key: CIVIX_OPENAPI_ENABLED
+        value: "false"
+      - key: S3_ENDPOINT
+        sync: false
+      - key: S3_REGION
+        value: auto
+      - key: S3_BUCKET
+        sync: false
+      - key: S3_ACCESS_KEY
+        sync: false
+      - key: S3_SECRET_KEY
+        sync: false
+      - key: S3_FORCE_PATH_STYLE
+        value: "false"
+      - key: S3_SSE
+        value: ""
+
+  - type: web
+    name: civix-agent
+    runtime: docker
+    dockerContext: .
+    dockerfilePath: apps/agent/Dockerfile
+    healthCheckPath: /internal/v1/health
+    plan: free
+    envVars:
+      - key: CIVIX_ENV
+        value: production
+      - key: AGENT_DATABASE_URL
+        sync: false
+      - key: AGENT_DB_SCHEMA
+        value: agent
+      - key: AGENT_INTERNAL_TOKEN
+        sync: false
+      - key: API_INTERNAL_TOKEN
+        sync: false
+      - key: BROWSER_WORKER_TOKEN
+        sync: false
+      - key: APPROVAL_SIGNING_SECRET
+        sync: false
+      - key: API_INTERNAL_URL
+        value: http://civix-api:8080
+      - key: BROWSER_WORKER_URL
+        sync: false
+      - key: S3_ENDPOINT
+        sync: false
+      - key: S3_REGION
+        value: auto
+      - key: S3_BUCKET
+        sync: false
+      - key: S3_ACCESS_KEY
+        sync: false
+      - key: S3_SECRET_KEY
+        sync: false
+      - key: S3_FORCE_PATH_STYLE
+        value: "false"
+      - key: S3_SSE
+        value: ""
+      - key: LLM_PROVIDER
+        value: none
+      - key: BRAVE_SEARCH_API_KEY
+        sync: false
+      - key: DATA_GOV_API_KEY
+        sync: false
+      - key: DATA_GOV_BASE_URL
+        value: https://api.data.gov.in
+
+  # Free Render instances are not suitable for Chromium's memory needs.
+  # Enable this service only on a paid instance or another Docker host.
+  - type: web
+    name: civix-browser-worker
+    runtime: docker
+    dockerContext: .
+    dockerfilePath: apps/agent/Dockerfile.browser
+    healthCheckPath: /internal/v1/health
+    plan: starter
+    envVars:
+      - key: CIVIX_ENV
+        value: production
+      - key: BROWSER_WORKER_TOKEN
+        sync: false
+      - key: APPROVAL_SIGNING_SECRET
+        sync: false
+      - key: BROWSER_HEADLESS
+        value: "true"
+      - key: BROWSER_MAX_SESSIONS
+        value: "2"
+      - key: BROWSER_SESSION_IDLE_TIMEOUT_SECONDS
+        value: "900"
+      - key: BROWSER_PRIVATE_HOST_ALLOWLIST
+        value: ""

@@ -1,0 +1,86 @@
+schemaVersion: "1.0"
+code: IN_CENTRAL_MSJE_PMS_SC
+version: 1
+name: Post Matric Scholarship for Scheduled Caste Students (PMS-SC)
+summary: Centrally sponsored scholarship for SC students in post-matric courses (Class XI to post-graduation), implemented through States/UTs.
+description: >
+  Provides financial assistance to Scheduled Caste students studying at the post-matriculation or post-secondary stage.
+  The Department of Social Justice & Empowerment funds the scheme; States and UTs implement it through NSP or their own
+  scholarship portals.
+department: Department of Social Justice & Empowerment
+ministry: Ministry of Social Justice & Empowerment
+category: SCHOLARSHIPS
+tags: [sc, post-matric, centrally-sponsored, income-based]
+jurisdiction: {level: CENTRAL, states: []}
+officialUrl: https://socialjustice.gov.in/schemes/25
+portalDomains: [scholarships.gov.in, socialjustice.gov.in]
+verificationStatus: DRAFT
+verificationNote: >
+  The guidelines retrieved (March 2021) cover 2020-21 to 2025-26. Reporting in 2026 indicates the Government is
+  considering raising the ₹2.5 lakh income ceiling; revised guidelines for 2026-27 were not found. Results are UNVERIFIED
+  until the current guidelines are checked. State portals may apply additional conditions.
+automationStatus: GUIDED
+automationNote: Applications go through NSP or the applicant's State scholarship portal; neither is automated by CIVIX.
+isTestService: false
+lastVerifiedAt: null
+deadline: null
+benefits:
+  - Course/tuition fees, academic allowance and maintenance allowance as notified by the State/UT.
+sources:
+  - id: pms_sc_guidelines_2021
+    url: https://socialwelfare.goa.gov.in/wp-content/uploads/2024/07/Guidelines-to-post-matric-scholaships-to-the-students-belonging-to-scheduled-castes-for-students-in-India-2020-2021-to-2025-26_0001.pdf
+    title: "Scheme of Post Matric Scholarships to the students belonging to Scheduled Castes — Guidelines (March 2021, 2020-21 to 2025-26)"
+    kind: GUIDELINES
+    retrievedAt: 2026-11-01
+    publisher: Department of Social Justice & Empowerment (copy hosted by Goa Social Welfare Department)
+  - id: msje_scheme_page
+    url: https://socialjustice.gov.in/schemes/25
+    title: Ministry of Social Justice & Empowerment — PMS-SC scheme page
+    kind: OFFICIAL_PORTAL
+    retrievedAt: 2026-11-01
+    note: Linked from the West Bengal OASIS PMS-SC leaflet; not fetched directly.
+eligibility:
+  rules:
+    - id: scheduled_caste
+      version: 1
+      field: social_category
+      operator: EQUALS
+      value: SC
+      description: Belongs to a Scheduled Caste as specified for the State/UT of domicile.
+      sourceId: pms_sc_guidelines_2021
+    - id: family_income_limit
+      version: 1
+      field: annual_family_income
+      operator: LESS_THAN_OR_EQUAL
+      value: 250000
+      description: Parents'/guardians' income from all sources not exceeding ₹2,50,000 in the last financial year.
+      sourceId: pms_sc_guidelines_2021
+      excerpt: "Rs. 2,50,000/-"
+    - id: post_matric_stage
+      version: 1
+      field: education_level
+      operator: IN
+      value: [SCHOOL_HIGHER_SECONDARY, DIPLOMA, UNDERGRADUATE, POSTGRADUATE, DOCTORAL]
+      description: Studying a recognised post-matriculation or post-secondary course.
+      sourceId: pms_sc_guidelines_2021
+    - id: indian_national
+      version: 1
+      field: nationality
+      operator: EQUALS
+      value: INDIAN
+      description: Open to Indian nationals only.
+      sourceId: pms_sc_guidelines_2021
+  notEvaluated:
+    - Seats filled through management or NRI quota are not covered.
+    - Awards continue subject to satisfactory academic performance and 75% attendance.
+requiredDocuments:
+  - {category: CASTE_CERTIFICATE, description: Scheduled Caste certificate, mandatory: true}
+  - {category: INCOME_CERTIFICATE, description: Valid income certificate, mandatory: true}
+  - {category: ACADEMIC_RECORD, description: Certificates of examinations passed, mandatory: true}
+  - {category: PHOTOGRAPH, description: Passport-size photograph, mandatory: true}
+  - {category: IDENTITY_PROOF, description: Aadhaar, mandatory: true}
+procedure:
+  - {order: 1, title: Freeship card, description: "Before admission, register on the scholarship portal with Aadhaar details and the course name."}
+  - {order: 2, title: Apply, description: Apply on the scholarship portal around the time of admission.}
+  - {order: 3, title: Verification, description: The institution and the State/UT department verify the application.}
+workflow: null

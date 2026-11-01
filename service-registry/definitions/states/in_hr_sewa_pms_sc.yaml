@@ -1,0 +1,66 @@
+schemaVersion: "1.0"
+code: IN_HR_SEWA_PMS_SC
+version: 1
+name: Haryana — Post Matric Scholarship Scheme for SC Students
+summary: Haryana's implementation of the post-matric scholarship for Scheduled Caste students domiciled in Haryana, family income below ₹2.5 lakh.
+description: >
+  Scheduled Caste students of Haryana studying in post-matric classes receive a monthly scholarship and reimbursement of
+  compulsory non-refundable fees, under the Government of India Post Matric Scholarship Scheme as implemented by the
+  Social Justice, Empowerment, Welfare of Scheduled Castes and Backward Classes and Antyodaya (SEWA) Department.
+department: Social Justice, Empowerment, Welfare of SCs & BCs and Antyodaya (SEWA) Department, Haryana
+ministry: Government of Haryana
+category: SCHOLARSHIPS
+tags: [sc, post-matric, haryana, state-scheme]
+jurisdiction: {level: STATE, states: [IN-HR]}
+officialUrl: https://sewa.haryana.gov.in/post-matric-scholarship-scheme-for-sc-students/
+portalDomains: [sewa.haryana.gov.in]
+verificationStatus: DRAFT
+verificationNote: >
+  Department page retrieved 2026-11-01 states eligibility and rates, and links guidelines for 2020-21 to 2025-26.
+  Current-year guidelines and the application route were not verified.
+automationStatus: NOT_AUTOMATED
+automationNote: The application route for the current year was not verified, so CIVIX cannot prepare portal-specific steps.
+isTestService: false
+lastVerifiedAt: null
+deadline: null
+benefits:
+  - "₹230 to ₹1,200 per month for post-matric to post-graduate classes, plus reimbursement of compulsory non-refundable fees (as stated on the department page)."
+sources:
+  - id: sewa_hr_page
+    url: https://sewa.haryana.gov.in/post-matric-scholarship-scheme-for-sc-students/
+    title: SEWA Haryana — Post Matric Scholarship Scheme for SC students
+    kind: OFFICIAL_PORTAL
+    retrievedAt: 2026-11-01
+    publisher: Government of Haryana
+eligibility:
+  rules:
+    - id: haryana_domicile
+      version: 1
+      field: domicile_state_code
+      operator: EQUALS
+      value: IN-HR
+      description: The student must be a domicile of Haryana.
+      sourceId: sewa_hr_page
+    - id: scheduled_caste
+      version: 1
+      field: social_category
+      operator: EQUALS
+      value: SC
+      description: The student must belong to a Scheduled Caste.
+      sourceId: sewa_hr_page
+    - id: family_income_limit
+      version: 1
+      field: annual_family_income
+      operator: LESS_THAN
+      value: 250000
+      description: Annual income of parents/guardians less than ₹2.50 lakh.
+      sourceId: sewa_hr_page
+      excerpt: "less than 2.50 lac"
+  notEvaluated: []
+requiredDocuments:
+  - {category: CASTE_CERTIFICATE, description: Scheduled Caste certificate, mandatory: true}
+  - {category: INCOME_CERTIFICATE, description: Income certificate, mandatory: true}
+  - {category: RESIDENCE_CERTIFICATE, description: Haryana domicile certificate, mandatory: true}
+procedure:
+  - {order: 1, title: Check the department notice, description: "Check the SEWA Haryana page for the current year's guidelines and application route."}
+workflow: null

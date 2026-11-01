@@ -1,0 +1,133 @@
+# CIVIX API configuration. Every value comes from the environment (see /.env.example); secrets have no defaults.
+spring:
+  application:
+    name: civix-api
+  threads:
+    virtual:
+      enabled: true
+  datasource:
+    url: ${CIVIX_DB_URL}
+    username: ${CIVIX_DB_USER}
+    password: ${CIVIX_DB_PASSWORD}
+    hikari:
+      schema: civix
+      maximum-pool-size: ${CIVIX_DB_POOL_SIZE:20}
+      connection-timeout: 5000
+  flyway:
+    enabled: true
+    schemas: civix
+    default-schema: civix
+    create-schemas: true
+    locations: classpath:db/migration
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: validate
+    properties:
+      hibernate:
+        default_schema: civix
+        jdbc:
+          time_zone: UTC
+  data:
+    redis:
+      host: ${REDIS_HOST:redis}
+      port: ${REDIS_PORT:6379}
+      password: ${REDIS_PASSWORD:}
+      timeout: 500ms
+      connect-timeout: 1s
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 10MB
+      max-request-size: 11MB
+  mvc:
+    problemdetails:
+      enabled: false
+
+server:
+  port: 8080
+  forward-headers-strategy: framework
+  shutdown: graceful
+  error:
+    include-stacktrace: never
+    include-message: never
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,prometheus
+  endpoint:
+    health:
+      probes:
+        enabled: true
+      show-details: never
+      group:
+        liveness:
+          include: livenessState
+        readiness:
+          # Redis is deliberately not part of readiness: rate limiting fails open when Redis is down.
+          # "storage" and "agent" always report UP and expose reachability as a non-fatal detail.
+          include: readinessState,db,storage,agent
+          show-details: always
+  health:
+    redis:
+      enabled: true
+  prometheus:
+    metrics:
+      export:
+        enabled: true
+
+springdoc:
+  api-docs:
+    enabled: ${CIVIX_OPENAPI_ENABLED:true}
+  swagger-ui:
+    enabled: ${CIVIX_OPENAPI_ENABLED:true}
+
+logging:
+  structured:
+    format:
+      console: ecs
+  level:
+    root: INFO
+    com.civix: INFO
+
+civix:
+  env: ${CIVIX_ENV:local}
+  public-url: ${CIVIX_PUBLIC_URL:http://localhost:3000}
+  enable-test-services: ${CIVIX_ENABLE_TEST_SERVICES:false}
+  admin-emails: ${CIVIX_ADMIN_EMAILS:}
+  jwt:
+    secret: ${JWT_SECRET}
+    access-ttl-minutes: ${JWT_ACCESS_TTL_MINUTES:15}
+    refresh-ttl-days: ${JWT_REFRESH_TTL_DAYS:14}
+  cookie:
+    secure: ${COOKIE_SECURE:true}
+  audit:
+    ip-pepper: ${AUDIT_IP_PEPPER}
+  internal:
+    api-token: ${API_INTERNAL_TOKEN}
+  approval:
+    signing-secret: ${APPROVAL_SIGNING_SECRET}
+  agent:
+    base-url: ${AGENT_INTERNAL_URL:http://agent:8000}
+    token: ${AGENT_INTERNAL_TOKEN}
+    connect-timeout-ms: 3000
+    read-timeout-ms: 10000
+    long-read-timeout-ms: 120000
+  storage:
+    endpoint: ${S3_ENDPOINT:}
+    region: ${S3_REGION:ap-south-1}
+    bucket: ${S3_BUCKET:civix-private}
+    access-key: ${S3_ACCESS_KEY}
+    secret-key: ${S3_SECRET_KEY}
+    force-path-style: ${S3_FORCE_PATH_STYLE:true}
+    sse: ${S3_SSE:AES256}
+    init-bucket: true
+  registry:
+    sync-on-startup: true
+    retry-interval-seconds: 30
+  rate-limit:
+    enabled: true
+  sse:
+    poll-fallback: true

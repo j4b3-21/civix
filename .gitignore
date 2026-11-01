@@ -1,0 +1,18 @@
+# secrets
+.env
+.env.*
+!.env.example
+infrastructure/nginx/certs/*
+!infrastructure/nginx/certs/.gitkeep
+# build outputs & caches
+node_modules/
+.next/
+target/
+.venv/
+__pycache__/
+.pytest_cache/
+*.tsbuildinfo
+coverage/
+# transfer artifact
+.civix-sync.tar.gz
+.DS_Store

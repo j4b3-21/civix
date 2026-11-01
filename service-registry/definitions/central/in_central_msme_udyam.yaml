@@ -1,0 +1,59 @@
+schemaVersion: "1.0"
+code: IN_CENTRAL_MSME_UDYAM
+version: 1
+name: Udyam Registration for Micro, Small and Medium Enterprises
+summary: Free, Aadhaar-based online registration of an enterprise as a Micro, Small or Medium Enterprise (MSME).
+description: >
+  Udyam Registration is the Government of India's single-window registration for MSMEs. Registration is free and paperless;
+  investment and turnover figures are taken from government databases using PAN and GSTIN.
+department: Office of the Development Commissioner (MSME)
+ministry: Ministry of Micro, Small and Medium Enterprises
+category: BUSINESS
+tags: [msme, business-registration, udyam]
+jurisdiction: {level: CENTRAL, states: []}
+officialUrl: https://udyamregistration.gov.in/
+portalDomains: [udyamregistration.gov.in]
+verificationStatus: SOURCE_VERIFIED
+verificationNote: Official portal home page retrieved 2026-11-01 (classification limits effective 1 April 2025).
+automationStatus: GUIDED
+automationNote: Registration requires Aadhaar OTP authentication of the proprietor/partner/director; CIVIX does not automate it.
+isTestService: false
+lastVerifiedAt: 2026-11-01
+deadline: null
+benefits:
+  - Registration is free of cost; the portal warns that no other private agency is authorised to register MSMEs.
+  - Udyam certificate used to access MSME schemes and benefits.
+sources:
+  - id: udyam_portal
+    url: https://udyamregistration.gov.in/
+    title: Udyam Registration Portal
+    kind: OFFICIAL_PORTAL
+    retrievedAt: 2026-11-01
+    publisher: Ministry of MSME
+eligibility:
+  rules:
+    - id: investment_within_medium_limit
+      version: 1
+      field: enterprise_investment_inr
+      operator: LESS_THAN_OR_EQUAL
+      value: 1250000000
+      description: Investment up to ₹125 crore (upper limit for a medium enterprise from 1 April 2025).
+      sourceId: udyam_portal
+    - id: turnover_within_medium_limit
+      version: 1
+      field: enterprise_turnover_inr
+      operator: LESS_THAN_OR_EQUAL
+      value: 5000000000
+      description: Turnover up to ₹500 crore (upper limit for a medium enterprise from 1 April 2025).
+      sourceId: udyam_portal
+  notEvaluated:
+    - "Classification: Micro ≤ ₹2.5 cr investment and ≤ ₹10 cr turnover; Small ≤ ₹25 cr and ≤ ₹100 cr; Medium ≤ ₹125 cr and ≤ ₹500 cr."
+    - PAN and GSTIN are required (from 1 April 2021).
+requiredDocuments:
+  - {category: IDENTITY_PROOF, description: Aadhaar of the proprietor/managing partner/director (number only; no upload required), mandatory: true}
+procedure:
+  - {order: 1, title: Start registration, description: "Open the official Udyam Registration portal and choose new registration."}
+  - {order: 2, title: Aadhaar verification, description: Validate the Aadhaar number with an OTP sent to the linked mobile.}
+  - {order: 3, title: PAN and enterprise details, description: Enter PAN; investment and turnover are fetched from government databases.}
+  - {order: 4, title: Certificate, description: The Udyam Registration Certificate is issued online.}
+workflow: null

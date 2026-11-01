@@ -1,0 +1,97 @@
+schemaVersion: "1.0"
+code: IN_CENTRAL_AICTE_PRAGATI
+version: 1
+name: AICTE Pragati Scholarship Scheme for Girl Students (Degree and Diploma)
+summary: Scholarship for girl students admitted to AICTE-approved technical degree or diploma courses, family income up to ₹8 lakh, at most two girls per family.
+description: >
+  A Ministry of Education scheme implemented by AICTE to support the advancement of girls in technical education.
+  Applications are made on the National Scholarships Portal.
+department: All India Council for Technical Education (AICTE)
+ministry: Ministry of Education
+category: SCHOLARSHIPS
+tags: [girls, technical-education, aicte, degree, diploma, nsp]
+jurisdiction: {level: CENTRAL, states: []}
+officialUrl: https://scholarships.gov.in
+portalDomains: [scholarships.gov.in]
+verificationStatus: DRAFT
+verificationNote: >
+  Not yet source-verified. The AICTE document retrieved on 2026-11-01 is an older edition (₹30,000 tuition + ₹2,000/month,
+  4,000 scholarships) while later guideline excerpts state ₹50,000 per year, and the income wording differs between
+  sources ("not more than ₹8 lakh" vs "less than ₹8 lakh"). Eligibility results for this scheme are therefore reported as UNVERIFIED.
+automationStatus: GUIDED
+automationNote: Applications are filed on NSP after One-Time Registration. CIVIX has no authorization to automate NSP.
+isTestService: false
+lastVerifiedAt: null
+deadline: null
+benefits:
+  - "Amount differs between guideline editions (see verification note); confirm on the current AICTE/NSP notice."
+sources:
+  - id: aicte_pragati_saksham_doc
+    url: https://aicte.gov.in/sites/default/files/pragatisaksham.pdf
+    title: AICTE — Pragati and Saksham scholarship scheme document (older edition)
+    kind: GUIDELINES
+    retrievedAt: 2026-11-01
+    publisher: AICTE
+  - id: pib_dec_2021
+    url: https://www.education.gov.in/sites/upload_files/mhrd/files/ru1125.pdf
+    title: "PIB — Scholarship scheme under AICTE to encourage girl students to pursue technical education (8 Dec 2021)"
+    kind: NOTIFICATION
+    retrievedAt: 2026-11-01
+    publisher: Press Information Bureau / Ministry of Education
+    note: Reviewed via search index excerpt only.
+eligibility:
+  rules:
+    - id: girl_student
+      version: 1
+      field: gender
+      operator: EQUALS
+      value: FEMALE
+      description: The scheme is for girl students.
+      sourceId: aicte_pragati_saksham_doc
+    - id: family_income_limit
+      version: 1
+      field: annual_family_income
+      operator: LESS_THAN_OR_EQUAL
+      value: 800000
+      description: Family income not more than ₹8 lakh per annum (preceding financial year).
+      sourceId: aicte_pragati_saksham_doc
+    - id: max_two_girls_per_family
+      version: 1
+      field: girl_children_in_family_availing
+      operator: LESS_THAN_OR_EQUAL
+      value: 2
+      description: At most two girl children per family are eligible.
+      sourceId: aicte_pragati_saksham_doc
+    - id: first_year_or_lateral_entry
+      version: 1
+      field: admission_mode
+      operator: IN
+      value: [FIRST_YEAR, LATERAL_ENTRY_SECOND_YEAR]
+      description: Admitted to the first year, or the second year through lateral entry, of a degree/diploma course.
+      sourceId: pib_dec_2021
+    - id: aicte_approved_institution
+      version: 1
+      field: institution_aicte_approved
+      operator: EQUALS
+      value: true
+      description: Studying in an AICTE-approved institution.
+      sourceId: aicte_pragati_saksham_doc
+    - id: technical_programme
+      version: 1
+      field: course_is_technical
+      operator: EQUALS
+      value: true
+      description: Pursuing a technical degree or diploma programme.
+      sourceId: aicte_pragati_saksham_doc
+  notEvaluated:
+    - Admission through the centralised admission process of the State/Central Government.
+requiredDocuments:
+  - {category: ACADEMIC_RECORD, description: Class X/XII marksheets and admission letter, mandatory: true}
+  - {category: INCOME_CERTIFICATE, description: Family income certificate (not below the rank of Tahsildar), mandatory: true}
+  - {category: IDENTITY_PROOF, description: Aadhaar, mandatory: true}
+  - {category: BANK_DOCUMENT, description: Aadhaar-seeded bank passbook, mandatory: true}
+procedure:
+  - {order: 1, title: Register on NSP, description: Complete One-Time Registration on the National Scholarships Portal.}
+  - {order: 2, title: Apply, description: Select the AICTE Pragati scheme and fill in the application.}
+  - {order: 3, title: Verification, description: The institute verifies the application.}
+workflow: null

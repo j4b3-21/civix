@@ -1,0 +1,149 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://civix.dev/schemas/execution-event/1.0.json",
+  "title": "CIVIX execution event (agent \u2192 API ingestion form)",
+  "description": "docs/AGENT_CONTRACTS.md \u00a72. Never contains secrets, document text or field values.",
+  "type": "object",
+  "required": [
+    "eventId",
+    "taskId",
+    "type",
+    "timestamp",
+    "agent",
+    "message",
+    "metadata"
+  ],
+  "properties": {
+    "eventId": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "taskId": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "type": {
+      "enum": [
+        "TASK_CREATED",
+        "TASK_STARTED",
+        "PROFILE_VALIDATED",
+        "SERVICE_DISCOVERED",
+        "ELIGIBILITY_EVALUATED",
+        "DOCUMENT_REQUIRED",
+        "DOCUMENT_EXTRACTED",
+        "PLAN_CREATED",
+        "APPROVAL_REQUIRED",
+        "APPROVAL_GRANTED",
+        "APPROVAL_REJECTED",
+        "BROWSER_STARTED",
+        "BROWSER_ACTION_COMPLETED",
+        "RECOVERY_STARTED",
+        "EXECUTION_PAUSED",
+        "CITIZEN_INPUT_REQUIRED",
+        "EXECUTION_RESUMED",
+        "SUBMISSION_APPROVAL_REQUIRED",
+        "SUBMISSION_COMPLETED",
+        "SUBMISSION_UNCERTAIN",
+        "RECEIPT_VERIFIED",
+        "TASK_COMPLETED",
+        "TASK_FAILED",
+        "TASK_CANCELLED"
+      ]
+    },
+    "timestamp": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "agent": {
+      "enum": [
+        "ORCHESTRATOR",
+        "PROFILE_AGENT",
+        "DISCOVERY_AGENT",
+        "ELIGIBILITY_AGENT",
+        "DOCUMENT_AGENT",
+        "PLANNING_AGENT",
+        "BROWSER_AGENT",
+        "RECOVERY_AGENT",
+        "VERIFICATION_AGENT"
+      ]
+    },
+    "step": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "maxLength": 128
+    },
+    "message": {
+      "type": "string",
+      "maxLength": 1000
+    },
+    "metadata": {
+      "type": "object"
+    },
+    "taskStatus": {
+      "enum": [
+        "QUEUED",
+        "RUNNING",
+        "WAITING_APPROVAL",
+        "WAITING_CITIZEN",
+        "COMPLETED",
+        "FAILED",
+        "CANCELLED"
+      ]
+    },
+    "applicationStatus": {
+      "enum": [
+        "DRAFT",
+        "IN_PROGRESS",
+        "ACTION_REQUIRED",
+        "SUBMITTED",
+        "SUBMISSION_UNCERTAIN",
+        "FAILED",
+        "CANCELLED"
+      ]
+    },
+    "currentStep": {
+      "type": "string"
+    },
+    "currentAgent": {
+      "enum": [
+        "ORCHESTRATOR",
+        "PROFILE_AGENT",
+        "DISCOVERY_AGENT",
+        "ELIGIBILITY_AGENT",
+        "DOCUMENT_AGENT",
+        "PLANNING_AGENT",
+        "BROWSER_AGENT",
+        "RECOVERY_AGENT",
+        "VERIFICATION_AGENT"
+      ]
+    },
+    "pendingCitizenInput": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "observation": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "error": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "properties": {
+        "code": {
+          "type": "string"
+        },
+        "message": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}

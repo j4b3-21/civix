@@ -1,0 +1,14 @@
+package com.civix.documents.domain;
+
+public enum DocumentCategory {
+    IDENTITY_PROOF,
+    ADDRESS_PROOF,
+    INCOME_CERTIFICATE,
+    CASTE_CERTIFICATE,
+    ACADEMIC_RECORD,
+    BANK_DOCUMENT,
+    RESIDENCE_CERTIFICATE,
+    DISABILITY_CERTIFICATE,
+    PHOTOGRAPH,
+    OTHER
+}

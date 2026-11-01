@@ -1,0 +1,39 @@
+# States and Union Territories of India, ISO 3166-2:IN codes. 28 states + 8 UTs.
+version: "2026.11.1"
+jurisdictions:
+  - {code: IN-AP, name: Andhra Pradesh, type: STATE}
+  - {code: IN-AR, name: Arunachal Pradesh, type: STATE}
+  - {code: IN-AS, name: Assam, type: STATE}
+  - {code: IN-BR, name: Bihar, type: STATE}
+  - {code: IN-CT, name: Chhattisgarh, type: STATE}
+  - {code: IN-GA, name: Goa, type: STATE}
+  - {code: IN-GJ, name: Gujarat, type: STATE}
+  - {code: IN-HR, name: Haryana, type: STATE}
+  - {code: IN-HP, name: Himachal Pradesh, type: STATE}
+  - {code: IN-JH, name: Jharkhand, type: STATE}
+  - {code: IN-KA, name: Karnataka, type: STATE}
+  - {code: IN-KL, name: Kerala, type: STATE}
+  - {code: IN-MP, name: Madhya Pradesh, type: STATE}
+  - {code: IN-MH, name: Maharashtra, type: STATE}
+  - {code: IN-MN, name: Manipur, type: STATE}
+  - {code: IN-ML, name: Meghalaya, type: STATE}
+  - {code: IN-MZ, name: Mizoram, type: STATE}
+  - {code: IN-NL, name: Nagaland, type: STATE}
+  - {code: IN-OR, name: Odisha, type: STATE}
+  - {code: IN-PB, name: Punjab, type: STATE}
+  - {code: IN-RJ, name: Rajasthan, type: STATE}
+  - {code: IN-SK, name: Sikkim, type: STATE}
+  - {code: IN-TN, name: Tamil Nadu, type: STATE}
+  - {code: IN-TG, name: Telangana, type: STATE}
+  - {code: IN-TR, name: Tripura, type: STATE}
+  - {code: IN-UP, name: Uttar Pradesh, type: STATE}
+  - {code: IN-UT, name: Uttarakhand, type: STATE}
+  - {code: IN-WB, name: West Bengal, type: STATE}
+  - {code: IN-AN, name: Andaman and Nicobar Islands, type: UNION_TERRITORY}
+  - {code: IN-CH, name: Chandigarh, type: UNION_TERRITORY}
+  - {code: IN-DH, name: Dadra and Nagar Haveli and Daman and Diu, type: UNION_TERRITORY}
+  - {code: IN-DL, name: Delhi, type: UNION_TERRITORY}
+  - {code: IN-JK, name: Jammu and Kashmir, type: UNION_TERRITORY}
+  - {code: IN-LA, name: Ladakh, type: UNION_TERRITORY}
+  - {code: IN-LD, name: Lakshadweep, type: UNION_TERRITORY}
+  - {code: IN-PY, name: Puducherry, type: UNION_TERRITORY}
